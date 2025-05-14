@@ -1,10 +1,33 @@
 import pygame
-import copy
 from collections import Counter
+import presets as pr
 
 def draw_map(cells, screen, cell_size):
     for i, j in cells:
         pygame.draw.rect(screen, "white", (cell_size * j, cell_size * i, cell_size, cell_size))
+
+def draw_outline(screen, cell_size, outline):
+    mouse_pos = pygame.mouse.get_pos()
+    points = None
+    if outline == 'glider':
+        points = pr.glider
+    elif outline == 'gun':
+        points = pr.gun
+    for i, j in points:
+        pygame.draw.rect(screen, "yellow",
+                         (cell_size * (mouse_pos[0] // cell_size + j), cell_size * (mouse_pos[1] // cell_size + i),
+                          cell_size, cell_size))
+
+def add_preset(cells, cell_size, outline):
+    mouse_pos = pygame.mouse.get_pos()
+    points = None
+    if outline == 'glider':
+        points = pr.glider
+    elif outline == 'gun':
+        points = pr.gun
+    for i, j in points:
+        cells.add((mouse_pos[1] // cell_size + i,mouse_pos[0] // cell_size + j))
+    return cells
 
 def count_neighbors(cells, i, j):
     return sum(
